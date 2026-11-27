@@ -1,0 +1,26 @@
+$kind: http-request
+description: Reduce a la mitad el próximo daño recibido.
+url: "{{baseUrl}}/games/{{gameId}}/actions"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "action": "defend"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{actionToken}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Código 200", () => pm.response.to.have.status(200));
+      if (pm.response.code === 200) {
+        const d = pm.response.json();
+        console.log(d.action.description, '| vida actor:', d.action.actorHpAfter, '| vida rival:', d.action.rivalHpAfter);
+      }
+    language: text/javascript
+order: 2000

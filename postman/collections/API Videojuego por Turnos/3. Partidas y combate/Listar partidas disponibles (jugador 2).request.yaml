@@ -1,0 +1,14 @@
+$kind: http-request
+url: "{{baseUrl}}/games?status=pendiente"
+method: GET
+queryParams:
+  status: pendiente
+auth:
+  type: bearer
+  credentials:
+    token: "{{token2}}"
+scripts:
+  - type: afterResponse
+    code: pm.test("Código 200", () => pm.response.to.have.status(200));
+    language: text/javascript
+order: 3000

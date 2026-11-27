@@ -1,0 +1,21 @@
+$kind: collection
+description: Antes de cada request consulta de quién es el turno y usa su token automáticamente.
+scripts:
+  - type: http:beforeRequest
+    code: |-
+      const base = pm.collectionVariables.get('baseUrl');
+      const t1 = pm.collectionVariables.get('token');
+      const t2 = pm.collectionVariables.get('token2');
+      const p1 = Number(pm.collectionVariables.get('playerId'));
+      pm.sendRequest({
+        url: base + '/games/' + pm.collectionVariables.get('gameId'),
+        method: 'GET',
+        header: { Authorization: 'Bearer ' + t1 }
+      }, (err, res) => {
+        if (err) { console.log(err); return; }
+        const turnIsP1 = res.json().currentTurnUserId === p1;
+        pm.collectionVariables.set('actionToken', turnIsP1 ? t1 : t2);
+        pm.collectionVariables.set('otherToken', turnIsP1 ? t2 : t1);
+      });
+    language: text/javascript
+order: 1000

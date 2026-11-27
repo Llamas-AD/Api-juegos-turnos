@@ -1,0 +1,14 @@
+$kind: http-request
+url: "{{baseUrl}}/games/{{gameIdC}}/finish"
+method: POST
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Código 200", () => pm.response.to.have.status(200));
+      pm.test("Finalizada", () => pm.expect(pm.response.json().status).to.eql("finalizada"));
+    language: text/javascript
+order: 5000

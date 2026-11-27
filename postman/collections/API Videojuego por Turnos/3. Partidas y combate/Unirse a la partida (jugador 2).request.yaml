@@ -1,0 +1,22 @@
+$kind: http-request
+url: "{{baseUrl}}/games/{{gameId}}/join"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "characterId": {{characterId2}}
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{token2}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Código 200", () => pm.response.to.have.status(200));
+      pm.test("Estado en curso", () => pm.expect(pm.response.json().status).to.eql("en_curso"));
+    language: text/javascript
+order: 5000

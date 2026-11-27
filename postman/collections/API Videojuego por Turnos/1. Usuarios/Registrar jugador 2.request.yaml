@@ -1,0 +1,25 @@
+$kind: http-request
+url: "{{baseUrl}}/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "username": "jugador2_{{$timestamp}}",
+      "email": "jugador2_{{$timestamp}}@correo.com",
+      "password": "123456"
+    }
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Código 201", () => pm.response.to.have.status(201));
+      const d = pm.response.json();
+      pm.collectionVariables.set("token2", d.token);
+      pm.collectionVariables.set("player2Id", d.user.id);
+      pm.collectionVariables.set("email2", d.user.email);
+    language: text/javascript
+order: 2000

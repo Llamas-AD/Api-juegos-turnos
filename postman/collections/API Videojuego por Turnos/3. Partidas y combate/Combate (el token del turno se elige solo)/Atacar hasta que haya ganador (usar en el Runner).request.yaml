@@ -1,0 +1,27 @@
+$kind: http-request
+description: En el Collection Runner se repite solo hasta que el servidor determina al ganador.
+url: "{{baseUrl}}/games/{{gameId}}/actions"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "action": "attack"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{actionToken}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Código 200", () => pm.response.to.have.status(200));
+      const d = pm.response.json();
+      console.log(d.action.description);
+      // En el Runner repite este request hasta que el servidor declare ganador
+      if (pm.response.code === 200 && d.winnerId === null) { postman.setNextRequest(pm.info.requestName); }
+      else { pm.collectionVariables.set('winnerId', d.winnerId); }
+    language: text/javascript
+order: 6000

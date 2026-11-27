@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{baseUrl}}/characters"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Ninja",
+      "characterClass": "ninja"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+scripts:
+  - type: afterResponse
+    code: pm.test("Código 400", () => pm.response.to.have.status(400));
+    language: text/javascript
+order: 4000

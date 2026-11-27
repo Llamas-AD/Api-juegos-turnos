@@ -1,0 +1,23 @@
+$kind: http-request
+url: "{{baseUrl}}/games"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "characterId": {{characterId}}
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Código 201", () => pm.response.to.have.status(201));
+      pm.collectionVariables.set("gameId", pm.response.json().id);
+      pm.test("Estado pendiente", () => pm.expect(pm.response.json().status).to.eql("pendiente"));
+    language: text/javascript
+order: 2000

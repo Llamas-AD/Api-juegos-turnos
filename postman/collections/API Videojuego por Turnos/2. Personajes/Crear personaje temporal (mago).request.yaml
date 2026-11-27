@@ -1,0 +1,23 @@
+$kind: http-request
+url: "{{baseUrl}}/characters"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Merlin",
+      "characterClass": "mago"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Código 201", () => pm.response.to.have.status(201));
+      pm.collectionVariables.set("tempCharacterId", pm.response.json().id);
+    language: text/javascript
+order: 5000

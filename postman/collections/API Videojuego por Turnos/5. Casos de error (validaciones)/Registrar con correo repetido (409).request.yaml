@@ -1,0 +1,20 @@
+$kind: http-request
+url: "{{baseUrl}}/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "username": "otro_usuario",
+      "email": "{{email1}}",
+      "password": "123456"
+    }
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: pm.test("Código 409", () => pm.response.to.have.status(409));
+    language: text/javascript
+order: 1000

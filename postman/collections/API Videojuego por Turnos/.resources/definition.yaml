@@ -1,0 +1,25 @@
+$kind: collection
+description: Ejecuta las carpetas en orden (1 a 5) o usa Collection Runner. Requiere la API corriendo en http://localhost:3000 (npm run dev).
+variables:
+  baseUrl: http://localhost:3000/api
+  token: ""
+  token2: ""
+  playerId: ""
+  player2Id: ""
+  email1: ""
+  email2: ""
+  characterId: ""
+  characterId2: ""
+  tempCharacterId: ""
+  gameId: ""
+  gameIdB: ""
+  gameIdC: ""
+  actionToken: ""
+  otherToken: ""
+  winnerId: ""
+auth:
+  - id: b9265803-b01c-4c92-bfcc-e37994bbf215
+    type: bearer
+    name: bearer auth
+    credentials:
+      token: "{{token}}"

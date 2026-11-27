@@ -1,0 +1,23 @@
+$kind: http-request
+url: "{{baseUrl}}/games"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "characterId": {{characterId}},
+      "opponentId": {{player2Id}}
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Código 201", () => pm.response.to.have.status(201));
+      pm.collectionVariables.set("gameIdB", pm.response.json().id);
+    language: text/javascript
+order: 1000

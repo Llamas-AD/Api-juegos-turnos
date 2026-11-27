@@ -1,0 +1,26 @@
+$kind: http-request
+description: Guarda automáticamente el token, el id y el correo del jugador 1.
+url: "{{baseUrl}}/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "username": "jugador1_{{$timestamp}}",
+      "email": "jugador1_{{$timestamp}}@correo.com",
+      "password": "123456"
+    }
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Código 201", () => pm.response.to.have.status(201));
+      const d = pm.response.json();
+      pm.collectionVariables.set("token", d.token);
+      pm.collectionVariables.set("playerId", d.user.id);
+      pm.collectionVariables.set("email1", d.user.email);
+    language: text/javascript
+order: 1000

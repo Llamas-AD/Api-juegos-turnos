@@ -1,0 +1,20 @@
+$kind: http-request
+url: "{{baseUrl}}/games/{{gameId}}/actions"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "action": "attack"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+scripts:
+  - type: afterResponse
+    code: pm.test("Código 409", () => pm.response.to.have.status(409));
+    language: text/javascript
+order: 7000
